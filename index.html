@@ -3,10 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock, Paper, Scissors</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div class="container">
+        <div class="heading">
+            <h1>Rock, Paper, Scissors</h1>
+            <p>Please select either rock, paper, or scissors below.</p>
+            <p>First to 5 points wins, good luck!</p>
+        </div>
+        <div class="choices">
+            <div class="">Computer chose: </div>
+            <span class="computer-Choice"></span>
+
+            <div class="">Human chose: </div>
+            <span class="human-Choice"></span>
+        </div>
+
+
+        <div class="scores">
+            <div class="score-container">
+                <h2>Human</h2>
+                <div class="human-score">0</div>
+            </div>
+            <div class="score-container">
+                <h2>Computer</h2>
+                <div class="computer-score">0</div>
+            </div>
+        </div>
+
+        <div class="button-container"></div>
+    </div>
     <script>
         console.log("Hello world!");
 
@@ -14,55 +42,95 @@
 
         let getComputerChoice = () => myArray[Math.floor(Math.random()*myArray.length)];
 
-        let getHumanChoice = () => {
-            let humanPrompt = prompt("Please choose rock, paper, or scissors.").toLowerCase();
-            if(humanPrompt === "rock" || humanPrompt === "paper" || humanPrompt === "scissors"){
-                return humanPrompt
-            }
-            else{
-                alert("You did not enter a valid choice.");
-                return null
-            }
-        };
+        // let getHumanChoice = () => {
+        //     let humanPrompt = prompt("Please choose rock, paper, or scissors.").toLowerCase();
+        //     if(humanPrompt === "rock" || humanPrompt === "paper" || humanPrompt === "scissors"){
+        //         return humanPrompt
+        //     }
+        //     else{
+        //         alert("You did not enter a valid choice.");
+        //         return null
+        //     }
+        // };
+        let humanScore = 0;
+        let computerScore = 0;
 
         let playGame = function(numRounds) {
-            let humanScore = 0;
-            let computerScore = 0;
-
-            let playRound = () => {
-                let computerChoice = getComputerChoice();
-
-                console.log(computerChoice);
-
-                let humanChoice = getHumanChoice();
-
-
-                console.log(humanChoice);
-
-                if(humanChoice === null){
-                    alert("Cannot play round without a valid choice");
-                    return
-                }
-                
-                if(humanChoice === computerChoice){
-                    alert("You have tied!");
-                }else if(humanChoice == "scissors" && computerChoice == "rock" || humanChoice == "rock" && computerChoice == "paper" || humanChoice == "paper" && computerChoice == "scissors"){
-                    alert("Computer beats human!");
-                    computerScore += 1;
-                }else{
-                    alert("Human beats computer!");
-                    humanScore += 1;
-                }
-
-                console.log(`Human Score: ${humanScore}, Computer Score: ${computerScore}`);
-            };
-
             for (let i = 0; i < numRounds; i++){
                 playRound();
             };
+
         };
 
-        playGame(5);
+        let playRound = (humanChoice) => {
+            let computerChoice = getComputerChoice();
+
+            console.log(computerChoice);
+
+            if(humanChoice === null){
+                alert("Cannot play round without a valid choice");
+                return
+            }
+            
+            if(humanChoice === computerChoice){
+                alert("You have tied!");
+            }else if(humanChoice == "scissors" && computerChoice == "rock" || humanChoice == "rock" && computerChoice == "paper" || humanChoice == "paper" && computerChoice == "scissors"){
+                alert("Computer beats human!");
+                computerScore += 1;
+            }else{
+                alert("Human beats computer!");
+                humanScore += 1;
+            }
+
+            console.log(`Human Score: ${humanScore}, Computer Score: ${computerScore}`);
+
+            displayCompChoice.textContent = computerChoice;
+            displayHumChoice.textContent = humanChoice.toString();
+            displayCompScore.textContent = computerScore;
+            displayHumScore.textContent = humanScore;
+            
+            if (humanScore === 5 || computerScore === 5){
+                setTimeout(() => {
+                    let winner = (humanScore === 5) ? "Human" : "Computer";
+                    alert(`Game over, ${winner} wins with a score of 5!`);
+
+                    buttons.forEach(butt => butt.disabled = true);
+                }, 100);
+            };
+        };
+
+        const butt1 = document.createElement("button"); //rock
+        const butt2 = document.createElement("button"); //paper
+        const butt3 = document.createElement("button"); //scissors
+        // const butt4 = document.createElement("button"); //start
+
+        const buttonContainer = document.querySelector(".button-container");
+        const displayCompChoice = document.querySelector(".computer-Choice");
+        const displayHumChoice = document.querySelector(".human-Choice");
+        const displayCompScore = document.querySelector(".computer-score");
+        const displayHumScore = document.querySelector(".human-score");
+
+        butt1.textContent = "rock";
+        butt2.textContent = "paper";
+        butt3.textContent = "scissors";
+        // butt4.textContent = "Start Game";
+
+        let buttons = [butt1, butt2, butt3];
+
+        buttonContainer.appendChild(butt1);
+        buttonContainer.appendChild(butt2);
+        buttonContainer.appendChild(butt3);
+        // document.body.appendChild(butt4);
+
+        buttons.forEach(butt => {
+            butt.addEventListener("click", () => playRound(butt.textContent));
+        });
+
+        // butt4.addEventListener("click", () => {
+            
+        // });
+
+
     </script>
 
 </body>
